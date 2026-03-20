@@ -4,8 +4,9 @@ interface int_user {
   _id?: mongoose.Types.ObjectId;
   name: string;
   email: string;
-  password: string;
+  password?: string;
   phone: string;
+  image?: string;
   role: "user" | "deliveryman" | "admin";
 }
 
@@ -20,11 +21,14 @@ const userScheema = new mongoose.Schema<int_user>(
     },
     password: {
       type: String,
-      required: true,
+      required: false,
     },
     phone: {
       type: String,
       required: false,
+    },
+    image: {
+      type: String,
     },
     role: {
       type: String,
@@ -35,5 +39,5 @@ const userScheema = new mongoose.Schema<int_user>(
   { timestamps: true },
 );
 
-const User = mongoose.models.User || mongoose.model("User", userScheema)
-export default User
+const User = mongoose.models.User || mongoose.model("User", userScheema);
+export default User;
