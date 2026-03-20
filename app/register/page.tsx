@@ -49,7 +49,7 @@ export default function RegisterPage() {
 
   const handleGoogle = async () => {
     setGLoading(true);
-    await signIn("google", { callbackUrl: "/dashboard" });
+    await signIn("google", { callbackUrl: "/" });
   };
 
   return (
