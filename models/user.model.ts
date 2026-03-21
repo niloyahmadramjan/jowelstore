@@ -1,43 +1,113 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose, { Document, Model, Schema } from "mongoose";
 
-interface int_user {
-  _id?: mongoose.Types.ObjectId;
-  name: string;
-  email: string;
+/* ─────────────────────────────────────────────────────────
+   Interface
+───────────────────────────────────────────────────────── */
+export interface IUser extends Document {
+  _id:       mongoose.Types.ObjectId;
+  name:      string;
+  email:     string;
   password?: string;
-  phone: string;
-  image?: string;
-  role: "user" | "deliveryman" | "admin";
+  phone?:    string;
+  image?:    string;
+  role:      "user" | "deliveryman" | "admin";
+  isActive:  boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const userScheema = new mongoose.Schema<int_user>(
+/* ─────────────────────────────────────────────────────────
+   Schema
+───────────────────────────────────────────────────────── */
+const userSchema = new Schema<IUser>(
   {
     name: {
-      type: String,
+      type:      String,
+      required:  [true, "Name is required"],
+      trim:      true,
+      minlength: [2,  "Name must be at least 2 characters"],
+      maxlength: [60, "Name must be at most 60 characters"],
     },
+
     email: {
-      type: String,
-      unique: true,
+      type:      String,
+      required:  [true, "Email is required"],
+      unique:    true,
+      lowercase: true,
+      trim:      true,
+      match: [
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        "Please provide a valid email address",
+      ],
     },
+
     password: {
-      type: String,
-      required: false,
+      type:      String,
+      required:  false,
+      select:    false,       // never returned unless explicitly requested
+      minlength: [6, "Password must be at least 6 characters"],
     },
+
     phone: {
-      type: String,
+      type:     String,
       required: false,
+      trim:     true,
+      match: [
+        /^[+]?[\d\s\-().]{7,20}$/,
+        "Please provide a valid phone number",
+      ],
     },
+
     image: {
-      type: String,
+      type:    String,
+      default: null,
     },
+
     role: {
-      type: String,
-      enum: ["user", "deleveryman", "admin"],
+      type:    String,
+      enum: {
+        values:  ["user", "deliveryman", "admin"] as const,
+        message: "{VALUE} is not a valid role",
+      },
       default: "user",
     },
+
+    isActive: {
+      type:    Boolean,
+      default: true,
+    },
   },
-  { timestamps: true },
+  {
+    timestamps:  true,
+    versionKey:  false,
+
+    toJSON: {
+      transform(_doc, ret) {
+        delete ret.password;
+        return ret;
+      },
+    },
+    toObject: {
+      transform(_doc, ret) {
+        delete ret.password;
+        return ret;
+      },
+    },
+  },
 );
 
-const User = mongoose.models.User || mongoose.model("User", userScheema);
+/* ─────────────────────────────────────────────────────────
+   Indexes
+───────────────────────────────────────────────────────── */
+userSchema.index({ role:      1 });
+userSchema.index({ isActive:  1 });
+userSchema.index({ createdAt: -1 });
+
+/* ─────────────────────────────────────────────────────────
+   Model
+───────────────────────────────────────────────────────── */
+const User: Model<IUser> =
+  (mongoose.models.User as Model<IUser>) ??
+  mongoose.model<IUser>("User", userSchema);
+
 export default User;
