@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 180" fill="none">
+  <!-- Icon -->
+  <rect x="40" y="8" width="80" height="80" rx="20" fill="#1a6b4a"/>
+  <polygon points="80,20 101,31 101,57 80,68 59,57 59,31" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.5"/>
+  <circle cx="80" cy="48" r="10" fill="white"/>
+  <line x1="80" y1="33" x2="80" y2="26" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <line x1="80" y1="70" x2="80" y2="63" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <line x1="63" y1="48" x2="70" y2="48" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <line x1="90" y1="48" x2="97" y2="48" stroke="white" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Wordmark -->
+  <text x="80" y="130" font-family="Georgia, serif" font-size="28" font-weight="700" fill="#1a6b4a" text-anchor="middle" letter-spacing="-0.5">JowelStore</text>
+
+  <!-- Divider line -->
+  <line x1="30" y1="143" x2="130" y2="143" stroke="#e5e7eb" stroke-width="1"/>
+
+  <!-- Tagline -->
+  <text x="80" y="162" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" text-anchor="middle" letter-spacing="2">GROCERY &amp; JEWELLERY</text>
+</svg>

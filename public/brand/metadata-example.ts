@@ -1,6 +1,7 @@
+// app/layout.tsx — metadata icons setup
+// Place favicon.svg inside /public/brand/
+
 import type { Metadata } from "next";
-import "./globals.css";
-import Provider from "@/global/Provider";
 
 export const metadata: Metadata = {
   title: {
@@ -11,17 +12,17 @@ export const metadata: Metadata = {
     "Farm-fresh groceries and certified jewellery delivered to your door.",
   keywords: ["grocery", "jewellery", "fresh", "delivery", "Bangladesh"],
   authors:  [{ name: "JowelStore" }],
- 
+
   icons: {
     icon:        "/brand/favicon.svg",
     shortcut:    "/brand/favicon.svg",
     apple:       "/brand/icon-mark.svg",
   },
- 
+
   openGraph: {
     title:       "JowelStore — Premium Grocery & Jewellery",
     description: "Farm-fresh groceries and certified jewellery, delivered with care.",
-    url:         "https://jowelstore.vercel.app",
+    url:         "https://jowelstore.com",
     siteName:    "JowelStore",
     images: [
       {
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     type:   "website",
   },
- 
+
   twitter: {
     card:        "summary_large_image",
     title:       "JowelStore — Premium Grocery & Jewellery",
@@ -42,17 +43,3 @@ export const metadata: Metadata = {
     images:      ["/brand/og-image.svg"],
   },
 };
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" className="w-full min-h-screen">
-      <body className="min-h-full ">
-          <Provider>{children}</Provider>
-      </body>
-    </html>
-  );
-}

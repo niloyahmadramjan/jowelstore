@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 72" fill="none">
+  <!-- Icon mark -->
+  <rect width="72" height="72" rx="16" fill="white" fill-opacity="0.2"/>
+  <rect width="72" height="72" rx="16" stroke="white" stroke-opacity="0.4" stroke-width="1.5" fill="none"/>
+  <polygon points="36,10 58,21 58,51 36,62 14,51 14,21" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.5"/>
+  <circle cx="36" cy="36" r="8" fill="white"/>
+  <line x1="36" y1="24" x2="36" y2="18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <line x1="36" y1="54" x2="36" y2="48" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <line x1="20" y1="36" x2="26" y2="36" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <line x1="46" y1="36" x2="52" y2="36" stroke="white" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Wordmark -->
+  <text x="88" y="42" font-family="Georgia, serif" font-size="30" font-weight="700" fill="white" letter-spacing="-0.5">Jowel</text>
+  <text x="174" y="42" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#f0d99a" letter-spacing="-0.5">Store</text>
+
+  <!-- Tagline -->
+  <text x="89" y="58" font-family="Arial, sans-serif" font-size="10" fill="white" fill-opacity="0.6" letter-spacing="2">GROCERY &amp; JEWELLERY</text>
+</svg>
