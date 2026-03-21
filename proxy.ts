@@ -5,6 +5,7 @@ export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const publicRoute = [
+    "/",
     "/login",
     "/register",
     "/api/auth",
