@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence }                   from "framer-motion";
-import { useSession, signOut }         from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
+import { type Session }        from "next-auth";
 import { useRouter, usePathname }                    from "next/navigation";
 import Link                                          from "next/link";
 import axios                                         from "axios";
 import { useDebounce }                               from "@/app/hooks/use-debounce";
+import Image from "next/image";
 
 /* ─────────────────────────────────────────────────────────
    Types
@@ -180,12 +182,14 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 shrink-0">
-              <div className="w-9 h-9 rounded-xl bg-green-700 flex items-center justify-center text-white">
-                <JowelIcon />
-              </div>
-              <span className="text-xl font-bold text-stone-900 dark:text-white tracking-tight hidden sm:block">
-                Jowel<span className="text-green-700">Store</span>
-              </span>
+                {/* <JowelIcon /> */}
+                <Image
+                    src="/brand/logo-horizontal.svg"
+                    alt="JowelStore"
+                    width={220}
+                    height={46}
+                    priority
+                 />
             </Link>
 
             {/* Desktop nav */}
@@ -579,15 +583,15 @@ function Avatar({ session }: { session: Session }) {
 /* ─────────────────────────────────────────────────────────
    Icons
 ───────────────────────────────────────────────────────── */
-function JowelIcon() {
-  return (
-    <svg viewBox="0 0 40 40" fill="none" className="w-5 h-5">
-      <path d="M20 4L36 12V28L20 36L4 28V12L20 4Z" fill="white" opacity=".2"/>
-      <path d="M20 4L36 12V28L20 36L4 28V12L20 4Z" stroke="white" strokeWidth="1.5"/>
-      <circle cx="20" cy="20" r="5" fill="white"/>
-    </svg>
-  );
-}
+// function JowelIcon() {
+//   return (
+//     <svg viewBox="0 0 40 40" fill="none" className="w-5 h-5">
+//       <path d="M20 4L36 12V28L20 36L4 28V12L20 4Z" fill="white" opacity=".2"/>
+//       <path d="M20 4L36 12V28L20 36L4 28V12L20 4Z" stroke="white" strokeWidth="1.5"/>
+//       <circle cx="20" cy="20" r="5" fill="white"/>
+//     </svg>
+//   );
+// }
 
 function SearchIcon({ size = 18, className = "" }: { size?: number; className?: string }) {
   return (
