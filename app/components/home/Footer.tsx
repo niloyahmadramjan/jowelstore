@@ -59,7 +59,7 @@ export default function Footer() {
     <footer className="bg-stone-900 text-stone-300">
 
       {/* Top banner */}
-      <div className="bg-green-700">
+      {/* <div className="bg-green-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-center gap-2 text-white text-sm font-medium">
             <ShoppingBag size={16} />
@@ -68,7 +68,7 @@ export default function Footer() {
             </span>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Main footer */}
       <motion.div

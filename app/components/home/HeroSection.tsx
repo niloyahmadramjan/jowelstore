@@ -107,7 +107,7 @@ export default function HeroSection() {
   /* Auto-advance every 5 s */
   useEffect(() => {
     if (paused) return;
-    const t = setInterval(() => setCurrent((c) => (c + 1) % SLIDES.length), 5000);
+    const t = setInterval(() => setCurrent((c) => (c + 1) % SLIDES.length), 6000);
     return () => clearInterval(t);
   }, [paused]);
 
@@ -125,7 +125,7 @@ export default function HeroSection() {
       <AnimatePresence mode="wait">
         <motion.div
           key={`bg-${slide.id}`}
-          className={`absolute inset-0 bg-gradient-to-br ${slide.bg}`}
+          className={`absolute inset-0 bg-linear-to-br ${slide.bg}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{    opacity: 0 }}

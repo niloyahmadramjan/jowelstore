@@ -21,17 +21,37 @@ interface Props {
 /* ─────────────────────────────────────────────────────────
    Constants
 ───────────────────────────────────────────────────────── */
+// const CATEGORIES = [
+//   "all", "vegetables", "fruits", "dairy", "meat",
+//   "bakery", "beverages", "gold", "silver", "diamond", "fashion",
+// ] as const;
+
+// const SORT_OPTIONS = [
+//   { value: "newest",     label: "Newest"             },
+//   { value: "price_asc",  label: "Price: Low to High" },
+//   { value: "price_desc", label: "Price: High to Low" },
+//   { value: "popular",    label: "Most Popular"        },
+//   { value: "top_rated",  label: "Top Rated"           },
+// ] as const;
+
+
+
 const CATEGORIES = [
-  "all", "vegetables", "fruits", "dairy", "meat",
-  "bakery", "beverages", "gold", "silver", "diamond", "fashion",
+  { value: "all",        label: "সব পণ্য",     emoji: "🛒" },
+  { value: "groceries",  label: "মুদিখানা",    emoji: "🥦" },
+  { value: "beauty",     label: "প্রসাধনী",    emoji: "🧴" },
+  { value: "snacks",     label: "স্ন্যাকস",    emoji: "🍪" },
+  { value: "drinks",     label: "পানীয়",      emoji: "🧃" },
+  { value: "household",  label: "গৃহস্থালি",   emoji: "🏠" },
+  { value: "baby",       label: "শিশু পণ্য",   emoji: "👶" },
 ] as const;
 
 const SORT_OPTIONS = [
-  { value: "newest",     label: "Newest"             },
-  { value: "price_asc",  label: "Price: Low to High" },
-  { value: "price_desc", label: "Price: High to Low" },
-  { value: "popular",    label: "Most Popular"        },
-  { value: "top_rated",  label: "Top Rated"           },
+  { value: "newest",     label: "নতুন পণ্য আগে"      },
+  { value: "popular",    label: "সবচেয়ে বিক্রিত"     },
+  { value: "top_rated",  label: "সেরা রেটিং"          },
+  { value: "price_asc",  label: "দাম: কম থেকে বেশি"  },
+  { value: "price_desc", label: "দাম: বেশি থেকে কম"  },
 ] as const;
 
 const cardVariants = {
@@ -182,15 +202,15 @@ export default function SearchResults({
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
         <div className="flex gap-2 overflow-x-auto pb-1 flex-1 scrollbar-hide">
           {CATEGORIES.map((cat) => (
-            <button key={cat} onClick={() => setCategory(cat)}
+            <button key={cat.value} onClick={() => setCategory(cat.value)}
               className={`
                 shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium capitalize transition-all duration-150
-                ${category === cat
+                ${category === cat.value
                   ? "bg-green-700 text-white shadow-md shadow-green-700/20"
                   : "bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:border-green-400 hover:text-green-700 dark:hover:text-green-400"
                 }
               `}>
-              {cat}
+              {cat.label}{cat.emoji}
             </button>
           ))}
         </div>
@@ -203,9 +223,12 @@ export default function SearchResults({
             focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-600/15
             transition-all duration-200
           ">
-          {SORT_OPTIONS.map(({ value, label }) => (
-            <option key={value} value={value}>{label}</option>
-          ))}
+         
+            {SORT_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+              ))}
         </select>
       </div>
 
