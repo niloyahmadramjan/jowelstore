@@ -30,11 +30,11 @@ interface CartCount {
    Nav links
 ───────────────────────────────────────────────────────── */
 const NAV_LINKS = [
-  { label: "Home",      href: "/"          },
-  { label: "Groceries", href: "/groceries" },
-  { label: "Jewellery", href: "/jewellery" },
-  { label: "Offers",    href: "/offers"    },
-  { label: "About",     href: "/about"     },
+  { label: "হোম",       href: "/"           },
+  { label: "মুদিখানা",  href: "/groceries"  },
+  { label: "প্রসাধনী",  href: "/beauty"     },
+  { label: "অফার",      href: "/offers"     },
+  { label: "আমাদের",   href: "/about"      },
 ] as const;
 
 /* ─────────────────────────────────────────────────────────
