@@ -1,6 +1,7 @@
 import mongoose, { Schema, type Document, type Model, type Types } from "mongoose";
 
 export interface ICartItem {
+  _id?: Types.ObjectId;
   product:       Types.ObjectId;
   name:          string;
   thumbnail:     string;
