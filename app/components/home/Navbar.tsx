@@ -599,7 +599,12 @@ export default function Navbar() {
                                 />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center text-stone-300">
-                                  <Image unoptimized size={16} />
+                                  <Image
+  src="/brand/logo.svg"
+  alt="icon"
+  width={16}
+  height={16}
+/>
                                 </div>
                               )}
                             </div>
