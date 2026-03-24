@@ -54,8 +54,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="bn" className="w-full min-h-screen">
-      <body className="min-h-full ">
+    <html lang="bn" className="light">
+      <body className="w-full min-h-screen ">
         <ThemeProvider>
           <Provider>
             <Navbar />

@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+@theme {
+  /* ডিফল্ট (Light Mode) কালার */
+  --color-background: white;
+  --color-text: var(--color-slate-900);
+  --color-primary: var(--color-red-500);
+}
+
+/* এই অংশটুকু আপনার সিস্টেম থিমকে ইগনোর করতে সাহায্য করবে */
+@variant dark (&:where(.dark, .dark *));
+

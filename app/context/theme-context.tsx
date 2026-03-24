@@ -41,6 +41,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setIsDark(dark);
     setMounted(true);
   }, []);
+  
 
   const toggleTheme = () => {
     const next = !isDark;
@@ -49,11 +50,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setIsDark(next);
   };
 
+  
+
   /* Prevent flash of wrong theme */
   if (!mounted) return null;
 
   return (
-    <ThemeContext.Provider value={{ isDark, toggleTheme }}>
+    <ThemeContext.Provider  value={{ isDark, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
