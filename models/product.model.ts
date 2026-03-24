@@ -383,6 +383,7 @@ productSchema.index({ price: 1 });
 productSchema.index({ sold: -1 });
 productSchema.index({ rating: -1 });
 productSchema.index({ createdAt: -1 });
+productSchema.index({ tags: 1 });
 
 /* Weighted full-text search */
 productSchema.index(

@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   keywords: ["grocery", "jewellery", "fresh", "delivery", "Bangladesh"],
   authors: [{ name: "JowelStore" }],
 
+  metadataBase: new URL("https://jowelstore.vercel.app/"),
+
   icons: {
     icon: "/brand/favicon.svg",
     shortcut: "/brand/favicon.svg",
@@ -29,7 +31,7 @@ export const metadata: Metadata = {
     siteName: "JowelStore",
     images: [
       {
-        url: "/brand/og-image.svg",
+        url: "/brand/favicon.svg",
         width: 1200,
         height: 630,
         alt: "JowelStore — Fresh picks, finest gems",
@@ -37,14 +39,6 @@ export const metadata: Metadata = {
     ],
     locale: "en_US",
     type: "website",
-  },
-
-  twitter: {
-    card: "summary_large_image",
-    title: "JowelStore — Premium Grocery & Jewellery",
-    description:
-      "Farm-fresh groceries and certified jewellery, delivered with care.",
-    images: ["/brand/og-image.svg"],
   },
 };
 

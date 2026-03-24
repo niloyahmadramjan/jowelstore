@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link          from "next/link";
-import Image         from "next/image";
-import { motion }    from "framer-motion";
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import {
   Heart,
   ShoppingCart,
@@ -18,59 +18,59 @@ import { useWishlist } from "@/app/hooks/use-wishlist";
 
 interface ProductCardProps {
   product: ProductItem;
-  index?:  number;   // stagger animation delay
+  index?: number; // stagger animation delay
 }
 
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
   const [wishlisted, setWishlisted] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
-   const { addToCart, loading } = useCart();
-    const { toggle, isWishlisted } = useWishlist();
+  const { addToCart, loading } = useCart();
+  const { toggle, isWishlisted } = useWishlist();
 
-  const discountPct = product.discount
-    ?? (product.originalPrice && product.originalPrice > product.price
-      ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+  const discountPct =
+    product.discount ??
+    (product.originalPrice && product.originalPrice > product.price
+      ? Math.round(
+          ((product.originalPrice - product.price) / product.originalPrice) *
+            100,
+        )
       : 0);
 
   const isOutOfStock = product.stock === 0;
 
+  const handleAddToCart = async (productId: string) => {
+    if (isOutOfStock) return;
+    const quantity = 1;
 
+    try {
+      // loading(true);
 
-  const handleAddToCart = async ( productId: string ) => {
-  if (isOutOfStock) return;
-  const quantity = 1
+      // Optimistic UI update
+      setAddedToCart(true);
 
-  try {
-    // loading(true);
+      await addToCart({ productId, quantity });
 
-    // Optimistic UI update
-    setAddedToCart(true);
+      // Optional: show success toast instead
+      setTimeout(() => setAddedToCart(false), 2000);
+    } catch (error) {
+      console.error("Add to cart failed:", error);
+      setAddedToCart(false);
+    } finally {
+      // loading(false);
+    }
+  };
 
-    await addToCart({ productId, quantity });
+  const handleWishlist = async (productId: string) => {
+    const previous = wishlisted;
+    setWishlisted(!previous);
 
-    // Optional: show success toast instead
-    setTimeout(() => setAddedToCart(false), 2000);
-  } catch (error) {
-    console.error("Add to cart failed:", error);
-    setAddedToCart(false);
-
-
-  } finally {
-    // loading(false);
-  }
-};
-
- const handleWishlist = async (productId: string) => {
-  const previous = wishlisted;
-  setWishlisted(!previous);
-
-  try {
-    await toggle(productId);
-  } catch (error) {
-    console.error("Wishlist toggle failed:", error);
-    setWishlisted(previous);
-  }
-};;
+    try {
+      await toggle(productId);
+    } catch (error) {
+      console.error("Wishlist toggle failed:", error);
+      setWishlisted(previous);
+    }
+  };
 
   return (
     <motion.div
@@ -78,23 +78,25 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{
         duration: 0.4,
-        ease:     [0.22, 1, 0.36, 1],
-        delay:    Math.min(index * 0.05, 0.3), // cap stagger at 300ms
+        ease: [0.22, 1, 0.36, 1],
+        delay: Math.min(index * 0.05, 0.3), // cap stagger at 300ms
       }}
     >
       <Link href={`/products/${product.slug}`} className="group block">
-        <div className="
+        <div
+          className="
           relative flex flex-col
           bg-white dark:bg-stone-900
           border border-stone-100 dark:border-stone-800
           rounded-2xl overflow-hidden
           shadow-sm hover:shadow-lg dark:hover:shadow-stone-950/50
           transition-shadow duration-300
-        ">
-
+        "
+        >
           {/* ── Image area ─────────────────────────── */}
           <div className="relative aspect-square overflow-hidden bg-stone-100 dark:bg-stone-800">
             <Image
+              unoptimized
               src={product.thumbnail || "/placeholder.png"}
               alt={product.name}
               fill
@@ -109,29 +111,35 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             {/* Badges — top left */}
             <div className="absolute top-2 left-2 flex flex-col gap-1">
               {discountPct > 0 && (
-                <span className="
+                <span
+                  className="
                   flex items-center gap-0.5
                   px-2 py-0.5 rounded-full text-[11px] font-bold
                   bg-red-500 text-white
-                ">
+                "
+                >
                   <BadgePercent size={10} />
                   {discountPct}%
                 </span>
               )}
               {product.isNewArrival && (
-                <span className="
+                <span
+                  className="
                   px-2 py-0.5 rounded-full text-[11px] font-bold
                   bg-green-600 text-white
-                ">
+                "
+                >
                   নতুন
                 </span>
               )}
               {product.isFeatured && (
-                <span className="
+                <span
+                  className="
                   flex items-center gap-0.5
                   px-2 py-0.5 rounded-full text-[11px] font-bold
                   bg-amber-500 text-white
-                ">
+                "
+                >
                   <Flame size={10} />
                   হট
                 </span>
@@ -140,12 +148,14 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
             {/* Wishlist — top right */}
             <button
-             onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              handleWishlist(product._id);
-            }}
-              aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleWishlist(product._id);
+              }}
+              aria-label={
+                wishlisted ? "Remove from wishlist" : "Add to wishlist"
+              }
               className="
                 absolute top-2 right-2
                 w-8 h-8 rounded-full
@@ -158,43 +168,52 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             >
               <Heart
                 size={15}
-                className={wishlisted
-                  ? "fill-red-500 text-red-500"
-                  : "text-stone-400 dark:text-stone-500"
+                className={
+                  wishlisted
+                    ? "fill-red-500 text-red-500"
+                    : "text-stone-400 dark:text-stone-500"
                 }
               />
             </button>
 
             {/* Out of stock overlay */}
             {isOutOfStock && (
-              <div className="
+              <div
+                className="
                 absolute inset-0 flex items-center justify-center
                 bg-black/40 backdrop-blur-[2px]
-              ">
-                <span className="
+              "
+              >
+                <span
+                  className="
                   px-3 py-1 rounded-full text-xs font-semibold
                   bg-stone-900/80 text-white
-                ">
+                "
+                >
                   স্টক নেই
                 </span>
               </div>
             )}
 
             {/* Quick view — appears on hover */}
-            <div className="
+            <div
+              className="
               absolute bottom-2 left-1/2 -translate-x-1/2
               opacity-0 group-hover:opacity-100
               translate-y-2 group-hover:translate-y-0
               transition-all duration-300
-            ">
-              <span className="
+            "
+            >
+              <span
+                className="
                 flex items-center gap-1.5
                 px-3 py-1.5 rounded-full text-xs font-medium
                 bg-white/90 dark:bg-stone-900/90
                 text-stone-700 dark:text-stone-200
                 backdrop-blur-sm shadow-md
                 whitespace-nowrap
-              ">
+              "
+              >
                 <Eye size={12} />
                 বিস্তারিত দেখুন
               </span>
@@ -203,20 +222,21 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
           {/* ── Info area ──────────────────────────── */}
           <div className="flex flex-col gap-2 p-3">
-
             {/* Category tag */}
             <span className="text-[11px] font-medium text-green-700 dark:text-green-500 uppercase tracking-wide">
               {product.category}
             </span>
 
             {/* Name */}
-            <p className="
+            <p
+              className="
               text-sm font-semibold leading-snug
               text-stone-800 dark:text-stone-100
               line-clamp-2
               group-hover:text-green-700 dark:group-hover:text-green-500
               transition-colors duration-200
-            ">
+            "
+            >
               {product.name}
             </p>
 
@@ -251,11 +271,12 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                 <span className="text-base font-bold text-stone-900 dark:text-white">
                   ৳{product.price.toLocaleString("bn-BD")}
                 </span>
-                {product.originalPrice && product.originalPrice > product.price && (
-                  <span className="text-xs text-stone-400 dark:text-stone-500 line-through">
-                    ৳{product.originalPrice.toLocaleString("bn-BD")}
-                  </span>
-                )}
+                {product.originalPrice &&
+                  product.originalPrice > product.price && (
+                    <span className="text-xs text-stone-400 dark:text-stone-500 line-through">
+                      ৳{product.originalPrice.toLocaleString("bn-BD")}
+                    </span>
+                  )}
               </div>
               {product.unit && (
                 <span className="text-[11px] text-stone-400 dark:text-stone-500">
@@ -266,7 +287,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
             {/* Add to cart */}
             <motion.button
-             onClick={(e) => {
+              onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 handleAddToCart(product._id);
@@ -277,11 +298,12 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                 w-full flex items-center justify-center gap-2
                 py-2 px-3 rounded-xl text-xs font-semibold
                 transition-all duration-200
-                ${isOutOfStock
-                  ? "bg-stone-100 dark:bg-stone-800 text-stone-400 cursor-not-allowed"
-                  : addedToCart
-                    ? "bg-green-600 text-white"
-                    : "bg-green-700 hover:bg-green-600 text-white shadow-sm shadow-green-700/25"
+                ${
+                  isOutOfStock
+                    ? "bg-stone-100 dark:bg-stone-800 text-stone-400 cursor-not-allowed"
+                    : addedToCart
+                      ? "bg-green-600 text-white"
+                      : "bg-green-700 hover:bg-green-600 text-white shadow-sm shadow-green-700/25"
                 }
               `}
             >
@@ -290,8 +312,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                 ? "স্টক নেই"
                 : addedToCart
                   ? "যোগ হয়েছে ✓"
-                  : "কার্টে যোগ করুন"
-              }
+                  : "কার্টে যোগ করুন"}
             </motion.button>
           </div>
         </div>

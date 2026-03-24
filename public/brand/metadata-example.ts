@@ -1,5 +1,4 @@
-// app/layout.tsx — metadata icons setup
-// Place favicon.svg inside /public/brand/
+
 
 import type { Metadata } from "next";
 
@@ -22,11 +21,11 @@ export const metadata: Metadata = {
   openGraph: {
     title:       "JowelStore — Premium Grocery & Jewellery",
     description: "Farm-fresh groceries and certified jewellery, delivered with care.",
-    url:         "https://jowelstore.com",
+    url:         "https://jowelstore.vercel.app",
     siteName:    "JowelStore",
     images: [
       {
-        url:    "/brand/og-image.svg",
+        url:    "/brand/favicon.svg",
         width:  1200,
         height: 630,
         alt:    "JowelStore — Fresh picks, finest gems",
@@ -40,6 +39,6 @@ export const metadata: Metadata = {
     card:        "summary_large_image",
     title:       "JowelStore — Premium Grocery & Jewellery",
     description: "Farm-fresh groceries and certified jewellery, delivered with care.",
-    images:      ["/brand/og-image.svg"],
+    images:      ["/brand/favicon.svg"],
   },
 };

@@ -2,44 +2,51 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link                        from "next/link";
-import Image                       from "next/image";
-import axios                       from "axios";
-import { useWishlist }             from "@/app/hooks/use-wishlist";
+import Link from "next/link";
+import Image from "next/image";
+import axios from "axios";
+import { useWishlist } from "@/app/hooks/use-wishlist";
 import {
-  Heart, ShoppingCart, Trash2,
-  ArrowRight, Star, Loader2, PackageX,
+  Heart,
+  ShoppingCart,
+  Trash2,
+  ArrowRight,
+  Star,
+  Loader2,
+  PackageX,
 } from "lucide-react";
 import { useCart } from "../hooks/use-card";
 
 /* ── Types ─────────────────────────────────────────── */
 interface WishlistItem {
-  _id:           string;
-  product:       string;
-  name:          string;
-  thumbnail:     string;
-  price:         number;
+  _id: string;
+  product: string;
+  name: string;
+  thumbnail: string;
+  price: number;
   originalPrice?: number;
-  slug:          string;
-  category:      string;
-  unit?:         string;
-  addedAt:       string;
+  slug: string;
+  category: string;
+  unit?: string;
+  addedAt: string;
 }
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 export default function WishlistPage() {
-  const [items,     setItems]     = useState<WishlistItem[]>([]);
+  const [items, setItems] = useState<WishlistItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [addingId,  setAddingId]  = useState<string | null>(null);
+  const [addingId, setAddingId] = useState<string | null>(null);
 
-  const { addToCart }        = useCart();
+  const { addToCart } = useCart();
   const { remove, isWishlisted, setIds } = useWishlist();
 
   /* Fetch wishlist */
   const fetchWishlist = async () => {
     try {
-      const { data } = await axios.get<{ items: WishlistItem[] }>("/api/wishlist");
+      const { data } = await axios.get<{ items: WishlistItem[] }>(
+        "/api/wishlist",
+      );
       setItems(data.items ?? []);
       /* Sync wishlist hook state */
       setIds(new Set(data.items.map((i) => i.product)));
@@ -50,7 +57,9 @@ export default function WishlistPage() {
     }
   };
 
-  useEffect(() => { fetchWishlist(); }, []);
+  useEffect(() => {
+    fetchWishlist();
+  }, []);
 
   useEffect(() => {
     const refresh = () => fetchWishlist();
@@ -100,12 +109,16 @@ export default function WishlistPage() {
           <div className="w-24 h-24 rounded-full bg-rose-50 dark:bg-rose-950/30 flex items-center justify-center">
             <Heart size={40} className="text-rose-300 dark:text-rose-700" />
           </div>
-          <h2 className="text-xl font-bold text-stone-900 dark:text-white">উইশলিস্ট খালি আছে</h2>
+          <h2 className="text-xl font-bold text-stone-900 dark:text-white">
+            উইশলিস্ট খালি আছে
+          </h2>
           <p className="text-sm text-stone-500 dark:text-stone-400 max-w-xs">
             পছন্দের পণ্যে হার্ট বাটন চাপলে এখানে যোগ হবে।
           </p>
-          <Link href="/shop"
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-green-700 hover:bg-green-800 text-white text-sm font-semibold transition-colors">
+          <Link
+            href="/shop"
+            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-green-700 hover:bg-green-800 text-white text-sm font-semibold transition-colors"
+          >
             পণ্য দেখুন <ArrowRight size={16} />
           </Link>
         </motion.div>
@@ -116,7 +129,6 @@ export default function WishlistPage() {
   return (
     <main className="min-h-screen bg-stone-50 dark:bg-stone-950">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -145,9 +157,13 @@ export default function WishlistPage() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
           <AnimatePresence mode="popLayout">
             {items.map((item, i) => {
-              const discountPct = item.originalPrice && item.originalPrice > item.price
-                ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)
-                : 0;
+              const discountPct =
+                item.originalPrice && item.originalPrice > item.price
+                  ? Math.round(
+                      ((item.originalPrice - item.price) / item.originalPrice) *
+                        100,
+                    )
+                  : 0;
               const isAdding = addingId === item.product;
 
               return (
@@ -155,8 +171,8 @@ export default function WishlistPage() {
                   key={item._id}
                   layout
                   initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1,  y: 0  }}
-                  exit={{    opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.35, ease: EASE, delay: i * 0.04 }}
                   className="
                     relative flex flex-col
@@ -194,6 +210,7 @@ export default function WishlistPage() {
                   <Link href={`/products/${item.slug}`} className="block">
                     <div className="relative aspect-square overflow-hidden bg-stone-100 dark:bg-stone-800">
                       <Image
+                        unoptimized
                         src={item.thumbnail || "/placeholder.png"}
                         alt={item.name}
                         fill
@@ -220,11 +237,12 @@ export default function WishlistPage() {
                       <span className="text-sm font-bold text-stone-900 dark:text-white">
                         ৳{item.price.toLocaleString("bn-BD")}
                       </span>
-                      {item.originalPrice && item.originalPrice > item.price && (
-                        <span className="text-[11px] text-stone-400 line-through">
-                          ৳{item.originalPrice.toLocaleString("bn-BD")}
-                        </span>
-                      )}
+                      {item.originalPrice &&
+                        item.originalPrice > item.price && (
+                          <span className="text-[11px] text-stone-400 line-through">
+                            ৳{item.originalPrice.toLocaleString("bn-BD")}
+                          </span>
+                        )}
                     </div>
 
                     {/* Add to cart */}
@@ -241,10 +259,11 @@ export default function WishlistPage() {
                         shadow-sm shadow-green-700/20
                       "
                     >
-                      {isAdding
-                        ? <Loader2 size={12} className="animate-spin" />
-                        : <ShoppingCart size={12} />
-                      }
+                      {isAdding ? (
+                        <Loader2 size={12} className="animate-spin" />
+                      ) : (
+                        <ShoppingCart size={12} />
+                      )}
                       {isAdding ? "যোগ হচ্ছে..." : "কার্টে যোগ করুন"}
                     </motion.button>
                   </div>
@@ -256,8 +275,10 @@ export default function WishlistPage() {
 
         {/* Bottom link */}
         <div className="text-center mt-10">
-          <Link href="/shop"
-            className="inline-flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-500 hover:text-green-800 transition-colors">
+          <Link
+            href="/shop"
+            className="inline-flex items-center gap-2 text-sm font-medium text-green-700 dark:text-green-500 hover:text-green-800 transition-colors"
+          >
             আরো পণ্য দেখুন <ArrowRight size={14} />
           </Link>
         </div>

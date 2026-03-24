@@ -1,9 +1,9 @@
-import { notFound }           from "next/navigation";
-import Image                   from "next/image";
-import type { Metadata }       from "next";
-import connectDb               from "@/lib/db";
-import Product                 from "@/models/product.model";
-import { RelatedProducts }     from  "@/app/components/products/related-products";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import type { Metadata } from "next";
+import connectDb from "@/lib/db";
+import Product from "@/models/product.model";
+import { RelatedProducts } from "@/app/components/products/related-products";
 import { ProductDetailsClient } from "@/app/components/products/product-details-client";
 
 /* ── Static params for SSG (optional but fast) ─────── */
@@ -17,9 +17,11 @@ export async function generateStaticParams() {
 }
 
 /* ── Dynamic metadata ───────────────────────────────── */
-export async function generateMetadata(
-  { params }: { params: Promise<{ slug: string }> }
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   await connectDb();
 
@@ -30,8 +32,8 @@ export async function generateMetadata(
   if (!product) return { title: "Product Not Found" };
 
   return {
-    title:       product.metaTitle       ?? product.name,
-    description: product.metaDesc        ?? product.shortDesc ?? "",
+    title: product.metaTitle ?? product.name,
+    description: product.metaDesc ?? product.shortDesc ?? "",
     openGraph: {
       images: [product.thumbnail],
     },
@@ -39,9 +41,11 @@ export async function generateMetadata(
 }
 
 /* ── Page ───────────────────────────────────────────── */
-export default async function ProductDetailsPage(
-  { params }: { params: Promise<{ slug: string }> }
-) {
+export default async function ProductDetailsPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   await connectDb();
 
@@ -56,12 +60,14 @@ export default async function ProductDetailsPage(
   return (
     <main className="min-h-screen bg-stone-50 dark:bg-stone-950">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
         {/* ── Product detail section ── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-
           {/* Left — Images */}
-          <ProductImages images={p.images} thumbnail={p.thumbnail} name={p.name} />
+          <ProductImages
+            images={p.images}
+            thumbnail={p.thumbnail}
+            name={p.name}
+          />
 
           {/* Right — Info + actions (client component) */}
           <ProductDetailsClient product={p} />
@@ -92,12 +98,18 @@ export default async function ProductDetailsPage(
               <div>
                 <div className="flex items-center gap-0.5 mb-1">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <svg key={i} width="16" height="16" viewBox="0 0 24 24"
-                      className={i < Math.round(p.rating)
-                        ? "fill-amber-400 text-amber-400"
-                        : "fill-stone-200 text-stone-200 dark:fill-stone-700 dark:text-stone-700"
-                      }>
-                      <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                    <svg
+                      key={i}
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      className={
+                        i < Math.round(p.rating)
+                          ? "fill-amber-400 text-amber-400"
+                          : "fill-stone-200 text-stone-200 dark:fill-stone-700 dark:text-stone-700"
+                      }
+                    >
+                      <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
                     </svg>
                   ))}
                 </div>
@@ -110,20 +122,28 @@ export default async function ProductDetailsPage(
             {/* Show latest 3 reviews */}
             <div className="space-y-4">
               {p.reviews.slice(0, 3).map((review: any) => (
-                <div key={review._id}
-                  className="border-t border-stone-100 dark:border-stone-800 pt-4">
+                <div
+                  key={review._id}
+                  className="border-t border-stone-100 dark:border-stone-800 pt-4"
+                >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-medium text-stone-800 dark:text-stone-200">
                       {review.name}
                     </span>
                     <div className="flex items-center gap-0.5">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <svg key={i} width="12" height="12" viewBox="0 0 24 24"
-                          className={i < review.rating
-                            ? "fill-amber-400 text-amber-400"
-                            : "fill-stone-200 text-stone-200"
-                          }>
-                          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                        <svg
+                          key={i}
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          className={
+                            i < review.rating
+                              ? "fill-amber-400 text-amber-400"
+                              : "fill-stone-200 text-stone-200"
+                          }
+                        >
+                          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
                         </svg>
                       ))}
                     </div>
@@ -154,9 +174,9 @@ function ProductImages({
   thumbnail,
   name,
 }: {
-  images:    string[];
+  images: string[];
   thumbnail: string;
-  name:      string;
+  name: string;
 }) {
   const allImages = images.length > 0 ? images : [thumbnail];
 
@@ -165,6 +185,7 @@ function ProductImages({
       {/* Main image */}
       <div className="relative aspect-square rounded-2xl overflow-hidden bg-stone-100 dark:bg-stone-800">
         <Image
+          unoptimized
           src={allImages[0]}
           alt={name}
           fill
@@ -178,9 +199,12 @@ function ProductImages({
       {allImages.length > 1 && (
         <div className="flex gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
           {allImages.map((img, i) => (
-            <div key={i}
-              className="relative w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-stone-100 dark:bg-stone-800 border-2 border-transparent">
+            <div
+              key={i}
+              className="relative w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-stone-100 dark:bg-stone-800 border-2 border-transparent"
+            >
               <Image
+                unoptimized
                 src={img}
                 alt={`${name} ${i + 1}`}
                 fill
