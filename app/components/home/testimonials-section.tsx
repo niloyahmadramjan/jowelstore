@@ -4,12 +4,42 @@ import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 
 const REVIEWS = [
-  { name: "রাহেলা বেগম",    area: "মিরপুর, ঢাকা",      rating: 5, text: "অনেক দিন ধরে জওয়েল স্টোর থেকে কিনছি। চাল, ডাল, তেল সব কিছু সময়মতো আসে। দাম অন্য দোকানের চেয়ে কম এবং মান ভালো।"                               },
-  { name: "করিম সাহেব",     area: "মোহাম্মদপুর, ঢাকা", rating: 5, text: "অনলাইনে মুদিখানার অর্ডার দিলে এত দ্রুত আসবে ভাবিনি! সকালে অর্ডার দিয়েছি, বিকেলেই পেয়ে গেছি। চমৎকার সার্ভিস।"                               },
-  { name: "নাফিসা আক্তার",  area: "উত্তরা, ঢাকা",      rating: 5, text: "সাবান, শ্যাম্পু, ক্রিম সব একসাথে পাই এখানে। একবার ভুল পণ্য এসেছিল, সাথে সাথে রিটার্ন করে নতুন পণ্য পাঠিয়ে দিয়েছে।"                       },
-  { name: "মো. সালাম",       area: "রামপুরা, ঢাকা",     rating: 4, text: "দাম সত্যিই কম। প্রতি মাসে বাজার করি জওয়েল স্টোর থেকে। পরিবারের সবাই খুশি। ডেলিভারি আরো দ্রুত হলে ভালো হতো।"                              },
-  { name: "ফারহানা ইসলাম",  area: "বনানী, ঢাকা",       rating: 5, text: "শিশু পণ্য সব অরিজিনাল পাই এখানে। অনেক জায়গায় নকল পেয়েছি, জওয়েল স্টোরে কখনো সমস্যা হয়নি। বিশ্বস্ত দোকান।"                             },
-  { name: "তানভীর হোসেন",   area: "মতিঝিল, ঢাকা",     rating: 5, text: "অফিসের জন্য প্রতি সপ্তাহে চা, কফি, বিস্কুট অর্ডার করি। কখনো হতাশ হইনি। Customer service অনেক ভালো এবং দ্রুত।" },
+  {
+    name: "রাহেলা বেগম",
+    area: "মিরপুর, ঢাকা",
+    rating: 5,
+    text: "অনেক দিন ধরে জুয়েল স্টোর থেকে কিনছি। চাল, ডাল, তেল সব কিছু সময়মতো আসে। দাম অন্য দোকানের চেয়ে কম এবং মান ভালো।",
+  },
+  {
+    name: "করিম সাহেব",
+    area: "মোহাম্মদপুর, ঢাকা",
+    rating: 5,
+    text: "অনলাইনে মুদিখানার অর্ডার দিলে এত দ্রুত আসবে ভাবিনি! সকালে অর্ডার দিয়েছি, বিকেলেই পেয়ে গেছি। চমৎকার সার্ভিস।",
+  },
+  {
+    name: "নাফিসা আক্তার",
+    area: "উত্তরা, ঢাকা",
+    rating: 5,
+    text: "সাবান, শ্যাম্পু, ক্রিম সব একসাথে পাই এখানে। একবার ভুল পণ্য এসেছিল, সাথে সাথে রিটার্ন করে নতুন পণ্য পাঠিয়ে দিয়েছে।",
+  },
+  {
+    name: "মো. সালাম",
+    area: "রামপুরা, ঢাকা",
+    rating: 4,
+    text: "দাম সত্যিই কম। প্রতি মাসে বাজার করি জুয়েল স্টোর থেকে। পরিবারের সবাই খুশি। ডেলিভারি আরো দ্রুত হলে ভালো হতো।",
+  },
+  {
+    name: "ফারহানা ইসলাম",
+    area: "বনানী, ঢাকা",
+    rating: 5,
+    text: "শিশু পণ্য সব অরিজিনাল পাই এখানে। অনেক জায়গায় নকল পেয়েছি, জুয়েল স্টোরে কখনো সমস্যা হয়নি। বিশ্বস্ত দোকান।",
+  },
+  {
+    name: "তানভীর হোসেন",
+    area: "মতিঝিল, ঢাকা",
+    rating: 5,
+    text: "অফিসের জন্য প্রতি সপ্তাহে চা, কফি, বিস্কুট অর্ডার করি। কখনো হতাশ হইনি। Customer service অনেক ভালো এবং দ্রুত।",
+  },
 ] as const;
 
 export function TestimonialsSection() {
@@ -43,7 +73,11 @@ export function TestimonialsSection() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.45, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.45,
+              delay: i * 0.07,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="
               flex flex-col gap-4 p-5 rounded-2xl
               bg-white dark:bg-stone-900
@@ -52,7 +86,10 @@ export function TestimonialsSection() {
               transition-shadow duration-300
             "
           >
-            <Quote size={20} className="text-green-200 dark:text-green-900 flex-shrink-0" />
+            <Quote
+              size={20}
+              className="text-green-200 dark:text-green-900 flex-shrink-0"
+            />
 
             <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed flex-1">
               {text}
@@ -64,13 +101,25 @@ export function TestimonialsSection() {
                   {name.charAt(0)}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-stone-900 dark:text-white">{name}</p>
-                  <p className="text-xs text-stone-400 dark:text-stone-500">{area}</p>
+                  <p className="text-sm font-semibold text-stone-900 dark:text-white">
+                    {name}
+                  </p>
+                  <p className="text-xs text-stone-400 dark:text-stone-500">
+                    {area}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-0.5">
                 {Array.from({ length: 5 }).map((_, si) => (
-                  <Star key={si} size={13} className={si < rating ? "fill-amber-400 text-amber-400" : "text-stone-200 dark:text-stone-700"} />
+                  <Star
+                    key={si}
+                    size={13}
+                    className={
+                      si < rating
+                        ? "fill-amber-400 text-amber-400"
+                        : "text-stone-200 dark:text-stone-700"
+                    }
+                  />
                 ))}
               </div>
             </div>

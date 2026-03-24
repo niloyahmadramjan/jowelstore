@@ -51,7 +51,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="w-full min-h-screen">
+    <html lang="bn" className="w-full min-h-screen">
       <body className="min-h-full ">
           <Provider>
              <Navbar />

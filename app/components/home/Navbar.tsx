@@ -199,14 +199,23 @@ export default function Navbar() {
 
             {/* ── Logo ──────────────────────────────────── */}
             <Link href="/" className="flex items-center gap-2.5 shrink-0">
-              <Image
+              {/* <Image
                 src="/brand/logo-horizontal.svg"
                 alt="JowelStore"
                 width={140}
                 height={36}
                 priority
                 className="h-9 w-auto"
-              />
+              /> */}
+               <div className="flex items-center gap-2.5 mb-3">
+                              <div className="w-10 h-10 rounded-xl bg-green-700 flex items-center justify-center">
+                                <ShoppingBag size={20} className="text-white" />
+                              </div>
+                              <div>
+                                <p className="text-white font-bold text-lg leading-none">জুয়েল স্টোর</p>
+                                <p className="text-green-500 text-xs">Jowel Store</p>
+                              </div>
+                            </div>
             </Link>
 
             {/* ── Desktop nav ───────────────────────────── */}

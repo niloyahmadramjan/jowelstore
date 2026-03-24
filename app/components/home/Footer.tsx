@@ -17,39 +17,58 @@ import {
 
 /* ── Data ───────────────────────────────────────────────── */
 const quickLinks = [
-  { label: "হোম",           href: "/" },
-  { label: "সব পণ্য",       href: "/shop" },
-  { label: "ক্যাটাগরি",     href: "/categories" },
-  { label: "অফার",          href: "/offers" },
+  { label: "হোম", href: "/" },
+  { label: "সব পণ্য", href: "/shop" },
+  { label: "ক্যাটাগরি", href: "/categories" },
+  { label: "অফার", href: "/offers" },
   { label: "আমাদের সম্পর্কে", href: "/about" },
-  { label: "যোগাযোগ",       href: "/contact" },
+  { label: "যোগাযোগ", href: "/contact" },
 ];
 
 const categories = [
-  { label: "চাল, ডাল ও আটা",    href: "/categories/rice-dal" },
-  { label: "তেল ও মশলা",        href: "/categories/oil-spices" },
-  { label: "সাবান ও শ্যাম্পু",   href: "/categories/soap" },
-  { label: "বিস্কুট ও চানাচুর",  href: "/categories/snacks" },
-  { label: "চা, কফি ও পানীয়",   href: "/categories/drinks" },
-  { label: "শিশু খাদ্য",         href: "/categories/baby-food" },
+  { label: "চাল, ডাল ও আটা", href: "/categories/rice-dal" },
+  { label: "তেল ও মশলা", href: "/categories/oil-spices" },
+  { label: "সাবান ও শ্যাম্পু", href: "/categories/soap" },
+  { label: "বিস্কুট ও চানাচুর", href: "/categories/snacks" },
+  { label: "চা, কফি ও পানীয়", href: "/categories/drinks" },
+  { label: "শিশু খাদ্য", href: "/categories/baby-food" },
   { label: "ডিটারজেন্ট ও ক্লিনার", href: "/categories/cleaning" },
-  { label: "দৈনন্দিন প্রয়োজনীয়",  href: "/categories/daily" },
+  { label: "দৈনন্দিন প্রয়োজনীয়", href: "/categories/daily" },
 ];
 
 const socials = [
-  { label: "Facebook",  href: "https://facebook.com", icon: Facebook,  color: "hover:text-blue-500" },
-  { label: "Instagram", href: "https://instagram.com", icon: Instagram, color: "hover:text-pink-500" },
-  { label: "YouTube",   href: "https://youtube.com",   icon: Youtube,   color: "hover:text-red-500" },
+  {
+    label: "Facebook",
+    href: "https://facebook.com",
+    icon: Facebook,
+    color: "hover:text-blue-500",
+  },
+  {
+    label: "Instagram",
+    href: "https://instagram.com",
+    icon: Instagram,
+    color: "hover:text-pink-500",
+  },
+  {
+    label: "YouTube",
+    href: "https://youtube.com",
+    icon: Youtube,
+    color: "hover:text-red-500",
+  },
 ];
 
 /* ── Animation variants ─────────────────────────────────── */
 const fadeUp = {
-  hidden:  { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+  },
 };
 
 const stagger = {
-  hidden:  {},
+  hidden: {},
   visible: { transition: { staggerChildren: 0.08 } },
 };
 
@@ -57,14 +76,13 @@ const stagger = {
 export default function Footer() {
   return (
     <footer className="bg-stone-900 text-stone-300">
-
       {/* Top banner */}
       {/* <div className="bg-green-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-center gap-2 text-white text-sm font-medium">
             <ShoppingBag size={16} />
             <span>
-              জওয়েল স্টোর — আপনার পাড়ার বিশ্বস্ত মুদি দোকান 🛒
+              জুয়েল স্টোর — আপনার পাড়ার বিশ্বস্ত মুদি দোকান 🛒
             </span>
           </div>
         </div>
@@ -79,10 +97,8 @@ export default function Footer() {
         viewport={{ once: true, margin: "-80px" }}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-
           {/* ── Col 1: Brand & Contact ── */}
           <motion.div className="space-y-6">
-
             {/* Logo */}
             <div>
               <div className="flex items-center gap-2.5 mb-3">
@@ -90,13 +106,15 @@ export default function Footer() {
                   <ShoppingBag size={20} className="text-white" />
                 </div>
                 <div>
-                  <p className="text-white font-bold text-lg leading-none">জওয়েল স্টোর</p>
+                  <p className="text-white font-bold text-lg leading-none">
+                    জুয়েল স্টোর
+                  </p>
                   <p className="text-green-500 text-xs">Jowel Store</p>
                 </div>
               </div>
               <p className="text-stone-400 text-sm leading-relaxed">
-                আপনার প্রতিদিনের প্রয়োজনীয় সব পণ্য এক জায়গায়। চাল, ডাল, তেল, মশলা
-                থেকে শুরু করে সাবান, শ্যাম্পু সবকিছুই পাবেন আমাদের কাছে।
+                আপনার প্রতিদিনের প্রয়োজনীয় সব পণ্য এক জায়গায়। চাল, ডাল, তেল,
+                মশলা থেকে শুরু করে সাবান, শ্যাম্পু সবকিছুই পাবেন আমাদের কাছে।
               </p>
             </div>
 
@@ -105,7 +123,7 @@ export default function Footer() {
               <li className="flex items-start gap-3 text-sm">
                 <MapPin size={16} className="text-green-500 mt-0.5 shrink-0" />
                 <span className="text-stone-400">
-                  জওয়েল স্টোর, মেইন রোড, ঢাকা, বাংলাদেশ
+                  জুয়েল স্টোর, মেইন রোড, ঢাকা, বাংলাদেশ
                 </span>
               </li>
               <li className="flex items-center gap-3 text-sm">
@@ -129,7 +147,8 @@ export default function Footer() {
               <li className="flex items-start gap-3 text-sm">
                 <Clock size={16} className="text-green-500 mt-0.5 shrink-0" />
                 <span className="text-stone-400">
-                  সকাল ৮টা — রাত ১০টা<br />
+                  সকাল ৮টা — রাত ১০টা
+                  <br />
                   সপ্তাহের ৭ দিন খোলা
                 </span>
               </li>
@@ -159,7 +178,7 @@ export default function Footer() {
           </motion.div>
 
           {/* ── Col 2: Quick Links ── */}
-          <motion.div >
+          <motion.div>
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5">
               Quick Links
             </h3>
@@ -182,7 +201,7 @@ export default function Footer() {
           </motion.div>
 
           {/* ── Col 3: Categories ── */}
-          <motion.div >
+          <motion.div>
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5">
               পণ্যের ধরন
             </h3>
@@ -205,7 +224,7 @@ export default function Footer() {
           </motion.div>
 
           {/* ── Col 4: Newsletter ── */}
-          <motion.div  className="space-y-5">
+          <motion.div className="space-y-5">
             <div>
               <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-1">
                 অফার পেতে চান?
@@ -215,10 +234,7 @@ export default function Footer() {
               </p>
             </div>
 
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              className="space-y-2.5"
-            >
+            <form onSubmit={(e) => e.preventDefault()} className="space-y-2.5">
               <input
                 type="email"
                 placeholder="আপনার ইমেইল লিখুন"
@@ -259,7 +275,6 @@ export default function Footer() {
               </div>
             </div>
           </motion.div>
-
         </div>
       </motion.div>
 
@@ -267,9 +282,8 @@ export default function Footer() {
       <div className="border-t border-stone-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-
             <p className="text-stone-500 text-xs text-center sm:text-left">
-              © {new Date().getFullYear()} জওয়েল স্টোর। সর্বস্বত্ব সংরক্ষিত।
+              © {new Date().getFullYear()} জুয়েল স্টোর। সর্বস্বত্ব সংরক্ষিত।
             </p>
 
             <div className="flex items-center gap-1 text-stone-500 text-xs">
@@ -281,7 +295,7 @@ export default function Footer() {
             <div className="flex items-center gap-4">
               {[
                 { label: "Privacy", href: "/privacy" },
-                { label: "Terms",   href: "/terms" },
+                { label: "Terms", href: "/terms" },
                 { label: "Returns", href: "/returns" },
               ].map(({ label, href }) => (
                 <Link
@@ -293,7 +307,6 @@ export default function Footer() {
                 </Link>
               ))}
             </div>
-
           </div>
         </div>
       </div>

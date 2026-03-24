@@ -41,8 +41,10 @@ export async function POST(req: NextRequest) {
       name,
       email:    email.toLowerCase().trim(),
       password: hashed,
-      phone:    mobile,   // ✅ fixed: mobile → phone
+      phone:    mobile,   
     });
+    const emailinput = email.toLowerCase().trim()
+    console.log(emailinput)
 
     return NextResponse.json(
       { message: "Account created successfully.", data: { id: user._id, email: user.email } },

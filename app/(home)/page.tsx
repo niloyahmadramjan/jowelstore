@@ -13,45 +13,42 @@ export default function Home() {
   return (
     <>
       {/* <HeroSection /> */}
-    
-       <main className="min-h-screen bg-stone-50 dark:bg-stone-950">
- 
-      {/* Hero Slider — full width, no padding */}
-      <HeroSlider />
+
+      <main className="min-h-screen bg-stone-50 dark:bg-stone-950">
+        {/* Hero Slider — full width, no padding */}
+        <HeroSlider />
         {/* <HomePage /> */}
- 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-14">
- 
-        {/* ১. Category tabs */}
-        <CategorySection />
- 
-        {/* ২. Flash Sale + countdown */}
-        <FlashSaleSection />
- 
-        {/* ৩. Recommended — "আপনার জন্য বাছাই" */}
-        <RecommendedProducts categories="groceries,beauty" limit={6} />
- 
-        {/* ৪. All Products — infinite scroll */}
-        <section>
-          <div className="mb-5">
-            <h2 className="text-xl sm:text-2xl font-bold text-stone-900 dark:text-white">
-              সব পণ্য
-            </h2>
-            <p className="text-sm text-stone-500 dark:text-stone-400 mt-0.5">
-              আমাদের সম্পূর্ণ কালেকশন দেখুন
-            </p>
-          </div>
-          <ProductGrid sort="newest" />
-        </section>
- 
-        {/* ৫. Why choose us */}
-        <WhyChooseUs />
- 
-        {/* ৬. Testimonials */}
-        <TestimonialsSection />
- 
-      </div>
-    </main>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-14">
+          {/* ১. Category tabs */}
+          <CategorySection />
+
+          {/* ২. Flash Sale + countdown */}
+          <FlashSaleSection />
+
+          {/* ৩. Recommended — "আপনার জন্য বাছাই" */}
+          <RecommendedProducts categories="groceries,beauty" limit={6} />
+
+          {/* ৪. All Products — infinite scroll */}
+          <section>
+            <div className="mb-5">
+              <h2 className="text-xl sm:text-2xl font-bold text-stone-900 dark:text-white">
+                সব পণ্য
+              </h2>
+              <p className="text-sm text-stone-500 dark:text-stone-400 mt-0.5">
+                আমাদের সম্পূর্ণ কালেকশন দেখুন
+              </p>
+            </div>
+            <ProductGrid sort="newest" />
+          </section>
+
+          {/* ৫. Why choose us */}
+          <WhyChooseUs />
+
+          {/* ৬. Testimonials */}
+          <TestimonialsSection />
+        </div>
+      </main>
     </>
   );
 }
