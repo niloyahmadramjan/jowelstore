@@ -212,7 +212,7 @@ export default function Navbar() {
                                 <ShoppingBag size={20} className="text-white" />
                               </div>
                               <div>
-                                <p className="text-white font-bold text-lg leading-none">জুয়েল স্টোর</p>
+                                <p className="text-black dark:text-white font-bold text-lg leading-none">জুয়েল স্টোর</p>
                                 <p className="text-green-500 text-xs">Jowel Store</p>
                               </div>
                             </div>
