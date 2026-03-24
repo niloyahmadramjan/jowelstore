@@ -1,7 +1,7 @@
 "use client";
 
-import { useState }      from "react";
-import { motion }        from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import {
   ShoppingCart,
   Heart,
@@ -15,55 +15,103 @@ import {
   Star,
   Flame,
 } from "lucide-react";
+import { useCart } from "@/app/hooks/use-card";
+import { useWishlist } from "@/app/hooks/use-wishlist";
 
-interface Variant { label: string; price: number; stock: number; sku?: string; }
+interface Variant {
+  label: string;
+  price: number;
+  stock: number;
+  sku?: string;
+}
 
 interface Product {
-  _id:           string;
-  name:          string;
-  shortDesc?:    string;
-  price:         number;
+  _id: string;
+  name: string;
+  shortDesc?: string;
+  price: number;
   originalPrice?: number;
-  discount?:     number;
-  category:      string;
-  unit?:         string;
-  stock:         number;
-  sold:          number;
-  rating:        number;
-  numReviews:    number;
-  isFeatured:    boolean;
-  isNewArrival:  boolean;
-  variants:      Variant[];
-  tags:          string[];
+  discount?: number;
+  category: string;
+  unit?: string;
+  stock: number;
+  sold: number;
+  rating: number;
+  numReviews: number;
+  isFeatured: boolean;
+  isNewArrival: boolean;
+  variants: Variant[];
+  tags: string[];
 }
 
 export function ProductDetailsClient({ product }: { product: Product }) {
-  const [qty,           setQty]           = useState(1);
+  const [qty, setQty] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState<number | null>(
     product.variants.length > 0 ? 0 : null,
   );
-  const [wishlisted,    setWishlisted]    = useState(false);
-  const [addedToCart,   setAddedToCart]   = useState(false);
+  const [wishlisted, setWishlisted] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(false);
+  const { addToCart, loading } = useCart();
+  const { toggle, isWishlisted } = useWishlist();
 
   /* Active price — variant overrides base price */
-  const activeVariant = selectedVariant !== null
-    ? product.variants[selectedVariant]
-    : null;
-  const activePrice   = activeVariant?.price ?? product.price;
-  const activeStock   = activeVariant?.stock ?? product.stock;
-  const isOutOfStock  = activeStock === 0;
+  const activeVariant =
+    selectedVariant !== null ? product.variants[selectedVariant] : null;
+  const activePrice = activeVariant?.price ?? product.price;
+  const activeStock = activeVariant?.stock ?? product.stock;
+  const isOutOfStock = activeStock === 0;
 
-  const discountPct = product.discount
-    ?? (product.originalPrice && product.originalPrice > activePrice
-      ? Math.round(((product.originalPrice - activePrice) / product.originalPrice) * 100)
+  const discountPct =
+    product.discount ??
+    (product.originalPrice && product.originalPrice > activePrice
+      ? Math.round(
+          ((product.originalPrice - activePrice) / product.originalPrice) * 100,
+        )
       : 0);
 
-  const handleAddToCart = () => {
-    if (isOutOfStock) return;
+
+
+const handleAddToCart = async ( productId: string, quantity: number ) => {
+  if (isOutOfStock) return;
+
+  // Prevent invalid quantity
+  
+  if (quantity <= 0) {
+    console.warn("Invalid quantity");
+    return;
+  }
+
+  try {
+    // loading(true);
+
+    // Optimistic UI update
     setAddedToCart(true);
+
+    await addToCart({ productId, quantity });
+
+    // Optional: show success toast instead
     setTimeout(() => setAddedToCart(false), 2000);
-    /* TODO: dispatch to cart store / API */
-  };
+  } catch (error) {
+    console.error("Add to cart failed:", error);
+    setAddedToCart(false);
+
+
+  } finally {
+    // loading(false);
+  }
+};
+
+ const handleToggleWishlist = async (productId: string) => {
+  const previous = wishlisted;
+  setWishlisted(!previous);
+
+  try {
+    await toggle(productId);
+  } catch (error) {
+    console.error("Wishlist toggle failed:", error);
+    setWishlisted(previous);
+  }
+};
 
   const handleShare = async () => {
     try {
@@ -75,7 +123,6 @@ export function ProductDetailsClient({ product }: { product: Product }) {
 
   return (
     <div className="space-y-6">
-
       {/* Badges */}
       <div className="flex flex-wrap gap-2">
         {product.isFeatured && (
@@ -107,9 +154,10 @@ export function ProductDetailsClient({ product }: { product: Product }) {
             <Star
               key={i}
               size={14}
-              className={i < Math.round(product.rating)
-                ? "fill-amber-400 text-amber-400"
-                : "text-stone-300 dark:text-stone-600"
+              className={
+                i < Math.round(product.rating)
+                  ? "fill-amber-400 text-amber-400"
+                  : "text-stone-300 dark:text-stone-600"
               }
             />
           ))}
@@ -162,9 +210,10 @@ export function ProductDetailsClient({ product }: { product: Product }) {
                   px-3 py-1.5 rounded-xl text-sm font-medium
                   border transition-all duration-200
                   disabled:opacity-40 disabled:cursor-not-allowed
-                  ${selectedVariant === i
-                    ? "border-green-600 bg-green-700 text-white"
-                    : "border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:border-green-600"
+                  ${
+                    selectedVariant === i
+                      ? "border-green-600 bg-green-700 text-white"
+                      : "border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:border-green-600"
                   }
                 `}
               >
@@ -177,24 +226,24 @@ export function ProductDetailsClient({ product }: { product: Product }) {
       )}
 
       {/* Stock indicator */}
-      <div className={`text-sm font-medium ${
-        isOutOfStock
-          ? "text-red-500"
-          : activeStock <= 10
-            ? "text-amber-500"
-            : "text-green-600 dark:text-green-500"
-      }`}>
+      <div
+        className={`text-sm font-medium ${
+          isOutOfStock
+            ? "text-red-500"
+            : activeStock <= 10
+              ? "text-amber-500"
+              : "text-green-600 dark:text-green-500"
+        }`}
+      >
         {isOutOfStock
           ? "স্টক নেই"
           : activeStock <= 10
             ? `মাত্র ${activeStock} টি বাকি আছে!`
-            : "স্টকে আছে ✓"
-        }
+            : "স্টকে আছে ✓"}
       </div>
 
       {/* Qty + Add to cart */}
       <div className="flex items-center gap-3">
-
         {/* Quantity selector */}
         <div className="flex items-center gap-0 rounded-xl border border-stone-200 dark:border-stone-700 overflow-hidden">
           <button
@@ -217,33 +266,40 @@ export function ProductDetailsClient({ product }: { product: Product }) {
 
         {/* Add to cart */}
         <motion.button
-          onClick={handleAddToCart}
+          onClick={() => handleAddToCart(product._id, qty)}
           disabled={isOutOfStock}
           whileTap={{ scale: 0.97 }}
           className={`
             flex-1 flex items-center justify-center gap-2
             py-3 px-5 rounded-xl text-sm font-semibold
             transition-all duration-200
-            ${isOutOfStock
-              ? "bg-stone-100 dark:bg-stone-800 text-stone-400 cursor-not-allowed"
-              : addedToCart
-                ? "bg-green-600 text-white"
-                : "bg-green-700 hover:bg-green-600 text-white shadow-lg shadow-green-700/25"
+            ${
+              isOutOfStock
+                ? "bg-stone-100 dark:bg-stone-800 text-stone-400 cursor-not-allowed"
+                : addedToCart
+                  ? "bg-green-600 text-white"
+                  : "bg-green-700 hover:bg-green-600 text-white shadow-lg shadow-green-700/25"
             }
           `}
         >
           <ShoppingCart size={16} />
-          {isOutOfStock ? "স্টক নেই" : addedToCart ? "কার্টে যোগ হয়েছে ✓" : "কার্টে যোগ করুন"}
+          {isOutOfStock
+            ? "স্টক নেই"
+            : addedToCart
+              ? "কার্টে যোগ হয়েছে ✓"
+              : "কার্টে যোগ করুন"}
         </motion.button>
 
         {/* Wishlist */}
         <button
-          onClick={() => setWishlisted((w) => !w)}
+          onClick={() => handleToggleWishlist(product._id)}
           className="w-11 h-11 rounded-xl border border-stone-200 dark:border-stone-700 flex items-center justify-center hover:border-red-400 transition-colors"
         >
           <Heart
             size={18}
-            className={wishlisted ? "fill-red-500 text-red-500" : "text-stone-400"}
+            className={
+              wishlisted ? "fill-red-500 text-red-500" : "text-stone-400"
+            }
           />
         </button>
 
@@ -259,15 +315,21 @@ export function ProductDetailsClient({ product }: { product: Product }) {
       {/* Trust badges */}
       <div className="grid grid-cols-3 gap-3 pt-2">
         {[
-          { icon: Truck,       label: "ফ্রি ডেলিভারি",  sub: "৳৯৯৯+ অর্ডারে"  },
-          { icon: ShieldCheck, label: "নিরাপদ পেমেন্ট", sub: "bKash / Nagad"    },
-          { icon: RotateCcw,   label: "রিটার্ন পলিসি",  sub: "৭ দিনের মধ্যে"  },
+          { icon: Truck, label: "ফ্রি ডেলিভারি", sub: "৳৯৯৯+ অর্ডারে" },
+          { icon: ShieldCheck, label: "নিরাপদ পেমেন্ট", sub: "bKash / Nagad" },
+          { icon: RotateCcw, label: "রিটার্ন পলিসি", sub: "৭ দিনের মধ্যে" },
         ].map(({ icon: Icon, label, sub }) => (
-          <div key={label}
-            className="flex flex-col items-center gap-1 p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 text-center">
+          <div
+            key={label}
+            className="flex flex-col items-center gap-1 p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 text-center"
+          >
             <Icon size={18} className="text-green-600 dark:text-green-500" />
-            <p className="text-xs font-semibold text-stone-700 dark:text-stone-300">{label}</p>
-            <p className="text-[11px] text-stone-400 dark:text-stone-500">{sub}</p>
+            <p className="text-xs font-semibold text-stone-700 dark:text-stone-300">
+              {label}
+            </p>
+            <p className="text-[11px] text-stone-400 dark:text-stone-500">
+              {sub}
+            </p>
           </div>
         ))}
       </div>
@@ -276,8 +338,10 @@ export function ProductDetailsClient({ product }: { product: Product }) {
       {product.tags.length > 0 && (
         <div className="flex flex-wrap gap-2 pt-1">
           {product.tags.map((tag) => (
-            <span key={tag}
-              className="px-2.5 py-1 rounded-full text-xs bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400">
+            <span
+              key={tag}
+              className="px-2.5 py-1 rounded-full text-xs bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400"
+            >
               #{tag}
             </span>
           ))}

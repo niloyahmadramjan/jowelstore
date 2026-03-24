@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link          from "next/link";
 import Image         from "next/image";
 import { motion }    from "framer-motion";
@@ -13,6 +13,8 @@ import {
   Flame,
 } from "lucide-react";
 import { ProductItem } from "@/app/hooks/use-products";
+import { useCart } from "@/app/hooks/use-card";
+import { useWishlist } from "@/app/hooks/use-wishlist";
 
 interface ProductCardProps {
   product: ProductItem;
@@ -22,6 +24,8 @@ interface ProductCardProps {
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
   const [wishlisted, setWishlisted] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
+   const { addToCart, loading } = useCart();
+    const { toggle, isWishlisted } = useWishlist();
 
   const discountPct = product.discount
     ?? (product.originalPrice && product.originalPrice > product.price
@@ -30,19 +34,43 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
   const isOutOfStock = product.stock === 0;
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (isOutOfStock) return;
-    setAddedToCart(true);
-    setTimeout(() => setAddedToCart(false), 1500);
-    /* TODO: dispatch to cart store */
-  };
 
-  const handleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setWishlisted((prev) => !prev);
-    /* TODO: call wishlist API */
-  };
+
+  const handleAddToCart = async ( productId: string ) => {
+  if (isOutOfStock) return;
+  const quantity = 1
+
+  try {
+    // loading(true);
+
+    // Optimistic UI update
+    setAddedToCart(true);
+
+    await addToCart({ productId, quantity });
+
+    // Optional: show success toast instead
+    setTimeout(() => setAddedToCart(false), 2000);
+  } catch (error) {
+    console.error("Add to cart failed:", error);
+    setAddedToCart(false);
+
+
+  } finally {
+    // loading(false);
+  }
+};
+
+ const handleWishlist = async (productId: string) => {
+  const previous = wishlisted;
+  setWishlisted(!previous);
+
+  try {
+    await toggle(productId);
+  } catch (error) {
+    console.error("Wishlist toggle failed:", error);
+    setWishlisted(previous);
+  }
+};;
 
   return (
     <motion.div
@@ -112,7 +140,11 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
             {/* Wishlist — top right */}
             <button
-              onClick={handleWishlist}
+             onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleWishlist(product._id);
+            }}
               aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
               className="
                 absolute top-2 right-2
@@ -234,7 +266,11 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
             {/* Add to cart */}
             <motion.button
-              onClick={handleAddToCart}
+             onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleAddToCart(product._id);
+              }}
               disabled={isOutOfStock}
               whileTap={{ scale: 0.96 }}
               className={`

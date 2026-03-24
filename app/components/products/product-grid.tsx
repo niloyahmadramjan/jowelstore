@@ -3,19 +3,19 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, RefreshCw, PackageX } from "lucide-react";
 
-import { ProductCard }        from  "@/app/components/products/product-card";
+import { ProductCard } from "@/app/components/products/product-card";
 import { ProductGridSkeleton } from "@/app/components/products/product-card-skeleton";
-import { useProducts }         from "@/app/hooks/use-products";
-import { useIntersection }     from "@/app/hooks/use-intersection";
+import { useProducts } from "@/app/hooks/use-products";
+import { useIntersection } from "@/app/hooks/use-intersection";
 
 interface ProductGridProps {
-  category?:    string;
+  category?: string;
   subCategory?: string;
-  sort?:        string;
-  search?:      string;
-  featured?:    boolean; 
-  title?:       string;
-  limit?:       number;
+  sort?: string;
+  search?: string;
+  featured?: boolean;
+  title?: string;
+  limit?: number;
 }
 
 export function ProductGrid({
@@ -26,20 +26,13 @@ export function ProductGrid({
   featured,
   title,
 }: ProductGridProps) {
-  const {
-    products,
-    isLoading,
-    isFetching,
-    hasMore,
-    error,
-    loadMore,
-    refresh,
-  } = useProducts({ category, subCategory, sort, search, featured });
+  const { products, isLoading, isFetching, hasMore, error, loadMore, refresh } =
+    useProducts({ category, subCategory, sort, search, featured });
 
   /* Sentinel div — when visible, trigger loadMore */
   const sentinelRef = useIntersection(loadMore, {
-    threshold:  0.1,
-    rootMargin: "300px", /* start loading 300px before bottom */
+    threshold: 0.1,
+    rootMargin: "50px" /* start loading 300px before bottom */,
   });
 
   /* ── Initial loading ───────────────────────────────── */
@@ -100,21 +93,19 @@ export function ProductGrid({
           tablet  : 3-4 columns
           desktop : 5-6 columns
       */}
-      <div className="
+      <div
+        className="
         grid gap-3 sm:gap-4
         grid-cols-2
         sm:grid-cols-3
         md:grid-cols-4
         lg:grid-cols-5
         xl:grid-cols-6
-      ">
+      "
+      >
         <AnimatePresence mode="popLayout">
           {products.map((product, i) => (
-            <ProductCard
-              key={product._id}
-              product={product}
-              index={i}
-            />
+            <ProductCard key={product._id} product={product} index={i} />
           ))}
         </AnimatePresence>
       </div>
