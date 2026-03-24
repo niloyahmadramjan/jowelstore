@@ -1,7 +1,7 @@
 "use client";
 
 import { ProductGrid }             from "@/app/components/products/product-grid";
-import { RecommendedProducts }     from "@/app/components/products/recommended-products";
+// import { RecommendedProducts }     from "@/app/components/products/recommended-products";
 
 /* ── Quick category tabs data ───────────────────────── */
 const CATEGORIES = [
@@ -24,11 +24,11 @@ export default function HomePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
 
         {/* ── Recommended / Personalized ── */}
-        <RecommendedProducts categories="groceries,beauty" limit={6} />
+        {/* <RecommendedProducts categories="groceries,beauty" limit={6} /> */}
 
         {/* ── Category tabs ── */}
         <section>
-          <h2 className="text-xl sm:text-2xl font-bold text-stone-900 dark:text-white mb-5">
+          <h2 className="text-xl sm:text-l2xl font-bold text-stone-900 dark:text-white mb-5">
             সব পণ্য
           </h2>
 

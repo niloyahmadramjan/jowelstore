@@ -50,7 +50,7 @@ export function useProducts(opts: UseProductsOptions = {}): UseProductsReturn {
     subCategory,
     sort     = "newest",
     search,
-    featured = false,
+    featured,
     limit    = 12,
     enabled  = true,
   } = opts;

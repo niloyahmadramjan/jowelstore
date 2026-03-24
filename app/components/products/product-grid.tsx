@@ -13,8 +13,9 @@ interface ProductGridProps {
   subCategory?: string;
   sort?:        string;
   search?:      string;
-  featured?:    boolean;
+  featured?:    boolean; 
   title?:       string;
+  limit?:       number;
 }
 
 export function ProductGrid({
