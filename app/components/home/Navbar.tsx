@@ -599,7 +599,7 @@ export default function Navbar() {
                                 />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center text-stone-300">
-                                  <Image unoptimizedOff size={16} />
+                                <span>F</span>
                                 </div>
                               )}
                             </div>
