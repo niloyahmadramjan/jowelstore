@@ -171,7 +171,7 @@ const productSchema = new Schema<IProduct, IProductModel>(
 
     thumbnail: {
       type: String,
-      required: [true, "Thumbnail image is required"],
+       default: "",
     },
 
     price: {

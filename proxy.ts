@@ -23,6 +23,20 @@ export async function proxy(req: NextRequest) {
     loginUrl.searchParams.set("callbackeUrl", req.url);
     return NextResponse.redirect(loginUrl);
   }
+
+  // un-authorized access
+  const role = token.role
+  if(!pathname.startsWith("/user")  &&  role !=="user"){
+    return NextResponse.redirect(new URL("/unathorize", req.url))
+  }
+  if(!pathname.startsWith("/rider")  &&  role !=="deliveryman"){
+    return NextResponse.redirect(new URL("/unathorize", req.url))
+  }
+  if(!pathname.startsWith("/admin")  &&  role !=="admin"){
+    return NextResponse.redirect(new URL("/unathorize", req.url))
+  }
+
+
   return NextResponse.next();
 }
 // will be not run this middleware if below action

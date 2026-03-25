@@ -599,7 +599,7 @@ export default function Navbar() {
                                 />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center text-stone-300">
-                                <span>F</span>
+                                  <span>P</span>
                                 </div>
                               )}
                             </div>
