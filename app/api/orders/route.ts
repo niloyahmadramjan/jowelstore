@@ -1,8 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { auth }    from "@/auth";
-import connectDb   from "@/lib/db";
-import Order       from "@/models/order.model";
-import Cart        from "@/models/cart.model";
+import { auth } from "@/auth";
+import connectDb from "@/lib/db";
+import Order from "@/models/order.model";
+import Cart from "@/models/cart.model";
+import { generateOrderId } from "@/app/utils/generateOrderId";
 
 /* ── GET /api/orders ─ list user orders ────────────── */
 export async function GET(req: NextRequest) {
@@ -11,10 +12,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  const page   = Number(req.nextUrl.searchParams.get("page")  ?? 1);
-  const limit  = Number(req.nextUrl.searchParams.get("limit") ?? 10);
+  const page = Number(req.nextUrl.searchParams.get("page") ?? 1);
+  const limit = Number(req.nextUrl.searchParams.get("limit") ?? 10);
   const status = req.nextUrl.searchParams.get("status") ?? null;
-  const skip   = (page - 1) * limit;
+  const skip = (page - 1) * limit;
 
   const filter: Record<string, unknown> = { user: session.user.id };
   if (status) filter.status = status;
@@ -36,7 +37,7 @@ export async function GET(req: NextRequest) {
     total,
     page,
     totalPages: Math.ceil(total / limit),
-    hasMore:    page * limit < total,
+    hasMore: page * limit < total,
   });
 }
 
@@ -47,63 +48,93 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await req.json() as {
+  const body = (await req.json()) as {
     shippingAddress: {
       fullName: string;
-      phone:    string;
-      address:  string;
-      area:     string;
-      city:     string;
+      phone: string;
+      address: string;
+      area: string;
+      city: string;
       district: string;
-      zip?:     string;
+      zip?: string;
     };
     paymentMethod: string;
-    note?:         string;
+    note?: string;
   };
 
   const { shippingAddress, paymentMethod, note } = body;
 
-  if (!shippingAddress?.fullName || !shippingAddress?.phone || !shippingAddress?.address) {
-    return NextResponse.json({ message: "Shipping address is required" }, { status: 400 });
+  if (
+    !shippingAddress?.fullName ||
+    !shippingAddress?.phone ||
+    !shippingAddress?.address
+  ) {
+    return NextResponse.json(
+      { message: "Shipping address is required" },
+      { status: 400 },
+    );
   }
+  try {
+    await connectDb();
 
-  await connectDb();
+    const cart = await Cart.findOne({ user: session.user.id });
+    if (!cart || cart.items.length === 0) {
+      return NextResponse.json({ message: "Cart is empty" }, { status: 400 });
+    }
 
-  const cart = await Cart.findOne({ user: session.user.id });
-  if (!cart || cart.items.length === 0) {
-    return NextResponse.json({ message: "Cart is empty" }, { status: 400 });
+    const subtotal = cart.items.reduce((s, i) => s + i.price * i.quantity, 0);
+    const discount = cart.discount ?? 0;
+    const total = subtotal - discount;
+    const deliveryCharge = total >= 999 ? 0 : 60;
+    const grandTotal = total + deliveryCharge;
+
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const todayOrderCount = await Order.countDocuments({
+      createdAt: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+    });
+
+    const orderId = generateOrderId(todayOrderCount);
+
+    const order = await Order.create({
+      orderId,
+      user: session.user.id,
+      items: cart.items,
+      shippingAddress,
+      subtotal,
+      discount,
+      deliveryCharge,
+      total: grandTotal,
+      coupon: cart.coupon,
+      paymentMethod,
+      note,
+      statusHistory: [{ status: "pending", at: new Date() }],
+    });
+
+  //   /* Clear cart after order */
+  //   cart.items = [];
+  //   cart.discount = 0;
+  //   cart.coupon = undefined;
+  //   await cart.save();
+
+  // window.dispatchEvent(new Event("cart:updated"));
+
+    return NextResponse.json(
+      { order, message: "Order placed successfully" },
+      { status: 201 },
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { message: `server errro : ${error}` },
+      { status: 500 },
+    );
   }
-
-  const subtotal      = cart.items.reduce((s, i) => s + i.price * i.quantity, 0);
-  const discount      = cart.discount ?? 0;
-  const total         = subtotal - discount;
-  const deliveryCharge= total >= 999 ? 0 : 60;
-  const grandTotal    = total + deliveryCharge;
-
-  const order = await Order.create({
-    user:            session.user.id,
-    items:           cart.items,
-    shippingAddress,
-    subtotal,
-    discount,
-    deliveryCharge,
-    total:           grandTotal,
-    coupon:          cart.coupon,
-    paymentMethod,
-    note,
-    statusHistory:   [{ status: "pending", at: new Date() }],
-  });
-
-  /* Clear cart after order */
-  cart.items    = [];
-  cart.discount = 0;
-  cart.coupon   = undefined;
-  await cart.save();
-
-  window && window.dispatchEvent(new Event("cart:updated"));
-
-  return NextResponse.json(
-    { order, message: "Order placed successfully" },
-    { status: 201 },
-  );
 }
